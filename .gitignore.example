@@ -1,0 +1,14 @@
+# Environment config
+.env
+
+# Postgres data volume (for safety, do not version real DB state)
+pgdata/
+
+# Backups and dumps
+backups/*.sql
+
+# VSCode settings
+.vscode/
+
+# OS-specific metadata
+.DS_Store

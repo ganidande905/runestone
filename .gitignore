@@ -1,0 +1,6 @@
+# .gitignore
+.env
+*.sql
+pgdata/
+backups/
+*.DS_Store
