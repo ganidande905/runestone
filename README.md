@@ -77,7 +77,6 @@ chmod +x scripts/*.sh
 
 ```
 cp .env.example .env
-cp .gitignore.example .ignore
 ```
 Edit .env with your DB name, user, password, and container name
 
