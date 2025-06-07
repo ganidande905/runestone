@@ -6,19 +6,17 @@ cabal-version: 1.12
 
 name:           simple
 version:        0.1.0.0
-homepage:       https://github.com/yourname/simple#readme
-bug-reports:    https://github.com/yourname/simple/issues
-author:         You
-maintainer:     you@example.com
-license:        MIT
+homepage:       https://github.com/ganidande905/simple#readme
+bug-reports:    https://github.com/ganidande905/simple/issues
+author:         GANESWARA NAGA VISHNU TEJA DANDE
+maintainer:     dandgani57@gmail.com
+license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
-extra-source-files:
-    README.md
 
 source-repository head
   type: git
-  location: https://github.com/yourname/simple
+  location: https://github.com/ganidande905/simple
 
 executable runestone
   main-is: Main.hs

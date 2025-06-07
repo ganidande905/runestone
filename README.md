@@ -101,7 +101,11 @@ runestone/
     └── stack.yaml
 ```
 
----
+
+## Prerequisites
+
+See [`PREREQUISITES.md`](./PREREQUISITES.md) for full setup.
+
 
 ## Getting Started
 
@@ -117,6 +121,10 @@ Ensure you add this to `~/.zshrc` or `~/.bashrc`:
 
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
+```
+Then:
+```
+source ~/.zshrc # or source ~/.bashrc
 ```
 
 Then:
