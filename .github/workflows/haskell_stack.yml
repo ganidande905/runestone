@@ -27,17 +27,21 @@ jobs:
           if [ ! -f "stack.yaml" ]; then
             echo "resolver: lts-23.24" > stack.yaml
           fi
+        working-directory: simple
 
       - name: Disable Haddock docs
         run: |
           echo "build:" >> stack.yaml
           echo "  haddock: false" >> stack.yaml
+        working-directory: simple
 
       - name: Install dependencies
         run: stack setup && stack build --only-dependencies
+        working-directory: simple
 
       - name: Build
         run: stack build
+        working-directory: simple
 
       - name: Run tests (if defined)
         run: |
@@ -46,3 +50,4 @@ jobs:
           else
             echo "No tests defined, skipping."
           fi
+        working-directory: simple
