@@ -1,0 +1,47 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.38.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           simple
+version:        0.1.0.0
+homepage:       https://github.com/yourname/simple#readme
+bug-reports:    https://github.com/yourname/simple/issues
+author:         You
+maintainer:     you@example.com
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/yourname/simple
+
+executable runestone
+  main-is: Main.hs
+  other-modules:
+      DB.Create
+      DB.Delete
+      DB.Dump
+      DB.Enter
+      DB.List
+      DB.Restore
+      DB.Utils
+      Lib
+      Paths_simple
+  hs-source-dirs:
+      app
+      src
+  ghc-options: -Wall
+  build-depends:
+      base >=4.7 && <5
+    , directory
+    , dotenv
+    , filepath
+    , postgresql-simple
+    , process
+    , time
+  default-language: Haskell2010

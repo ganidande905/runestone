@@ -1,132 +1,178 @@
-# Runestone : Local PostgreSQL DB Hub with Docker
+# Runestone : Local PostgreSQL DB Hub with Docker + Haskell
 
-A lightweight, script-powered local PostgreSQL container for all your dev databases. Switch, dump, restore, and manage Postgres DBs with ease from your terminal.
+A lightweight, script-powered local PostgreSQL container for all your dev databases — now enhanced with **native Haskell support** for clean, type-safe, CLI-based DB management.
 
-> 💡 Built for testing, local development, and fast prototyping , not production.
+> Built for testing, local development, and fast prototyping — not production.
+
+---
+
+## What’s New in This Version?
+
+> **Runestone is the first of its kind**: a Haskell-powered, CLI-first, terminal-native PostgreSQL management tool for a Dockerized local development environment.
+
+---
+
+## Why Haskell?
+
+Unlike Python or Bash, Haskell offers unique advantages for building robust CLI tools like Runestone:
+
+| Feature               | Why it helps                                   |
+|----------------------|------------------------------------------------|
+| **Type Safety**        | Catches bugs at compile time, reducing runtime crashes |
+| **Native Speed**       | Compiles to fast binaries with C-level performance |
+| **Functional Style**   | Encourages clear, modular, and testable code |
+| **Small Binaries**     | Produces standalone executables, no runtime needed |
+| **Crash Prevention**   | Pure functions + strong types = fewer surprises |
+
+These traits make Haskell ideal for CLI tools that interact with critical services like databases — giving you both **performance and peace of mind**.
+##  How It’s Implemented
+
+
+Runestone is implemented as a single command-line binary with subcommands.
+
+- Each subcommand (e.g. `create-db`, `list-db`, `enter-db`) is implemented as a Haskell function.
+- Internally, these are routed from `Main.hs` using pattern matching on CLI arguments.
+- The `src/DB` directory contains modular logic for each feature.
+### Tech Stack:
+- [`postgresql-simple`](https://hackage.haskell.org/package/postgresql-simple): Idiomatic and easy-to-use Postgres client library.
+- [`dotenv`](https://hackage.haskell.org/package/dotenv): Reads `.env` configs so credentials are not hardcoded.
+
+---
+
+### Why We Chose `postgresql-simple` over `hasql`
+
+While **Hasql** is known for its high-performance, binary-protocol-based PostgreSQL driver — ideal for **low-level, type-safe, and high-throughput** applications — we decided to switch to **`postgresql-simple`** for this CLI utility after facing several real-world development challenges.
+
+####  Challenges Faced with Hasql
+
+- **Deprecation Confusion**: Many parts of `hasql-connection` (like `settings`) were deprecated or removed in newer versions (e.g., `1.9+`), with unclear upgrade paths.
+- **Documentation Gaps**: Official documentation and working examples are outdated or missing for the latest versions.
+- **Complex Connection Setup**: Connecting with `.env` variables was unintuitive and broke in newer `hasql` versions.
+- **Opaque Error Types**: Handling errors like `SessionError` and `QueryError` required more boilerplate and added friction during development.
+- **Tooling Incompatibility**: Integration with common utilities like `dotenv` was painful, and type mismatches caused long debug sessions.
+
+#### Why `postgresql-simple` Works Better Here
+
+- **Quick Setup**: Simple connection using environment variables with `defaultConnectInfo`.
+- **Dynamic SQL Support**: Supports `fromString` for composing queries interactively — perfect for CLI tools.
+- **Beginner-Friendly**: Simpler type system, easier error handling, and faster prototyping.
+- **Wider Community Support**: More up-to-date tutorials, docs, and answers available online.
+
+> We may revisit `hasql` in the future for advanced use cases such as batch operations or when performance becomes a critical concern. But for now, `postgresql-simple` gives us the **right balance of simplicity and power** for building developer-facing CLI tools.
+---
+
+## Benefits of Haskell in Runestone
+
+| Benefit | Description |
+|--------|-------------|
+| Strong Types | Avoid common DB issues at compile-time |
+| Fast | Compiled to native code — no interpreter overhead |
+| Modular | Each command is a standalone executable |
+| Cleaner Code | No more parsing Bash script edge cases |
+| Testable | Each binary can be independently tested |
+| Safer | Fewer runtime crashes, cleaner resource handling |
+
+---
 
 ## Features
 
 - Dockerized PostgreSQL 14
-- Central hub to manage **multiple databases**
-- Easy-to-use bash scripts for:
+- Central hub to manage **multiple dev databases**
+-  Native Haskell CLI tools for:
   - Creating / Deleting databases
   - Dumping / Restoring `.sql` files
-  - Listing & entering databases
-- `.env` powered setup
-Designed for:
-- Local dev & testing
-- Playing with .sql dumps
-- API prototyping with fresh DBs
-- Team setups with easy onboarding
+  - Listing & entering DBs
+- `.env`-powered configuration
+- Ultra-fast local development setup without installing PostgreSQL on your machine
 
-
-
-What Runestone is Not
-----
-While Runestone is powerful for local development, it’s important to understand its scope and limitations:
-- Not a GUI client
-Runestone provides terminal-based control it doesn’t offer visual tools like DBeaver, TablePlus, or pgAdmin.
--  Not for production
-This setup is meant for local development only. It lacks production-grade security, backups, and high-availability guarantees.
--  No clustering or replication support
-Runestone doesn’t handle distributed database setups like primary-replica clusters, sharding, or replication.
-- Not a cloud DB replacement
-It doesn’t compete with services like Amazon RDS, Google Cloud SQL, or Supabaseit’s a testing sandbox.
-- PostgreSQL only
-This is a Postgres-only setup. It does not support MySQL, MongoDB, Redis, or other databases out of the box.
-
-### Use Case
 ---
-You’re building 3 side projects,all use PostgreSQL. You want to:
-- Test against different DBs without polluting your global system
-- Reset DBs quickly with fresh .sql data
-- Keep backups easily
-- Avoid installing Postgres directly
-- Keep local backups organized
-
-That’s where Runestone comes in one container, infinite databases.
 
 ## Folder Structure
-    runestone/
-    ├── .env.example
-    ├── docker-compose.yml
-    ├── backups/               # All DB dumps saved here
-    └── scripts/               # All utility bash scripts
-        ├── create_db.sh
-        ├── delete_db.sh
-        ├── dump_db.sh
-        ├── enter_db.sh
-        ├── list_db.sh
-        └── restore_db.sh
+
+```
+runestone/
+├── .env.example
+├── docker-compose.yml
+├── backups/
+└── simple/
+    ├── app/
+    ├── src/DB/
+    ├── package.yaml
+    └── stack.yaml
+```
 
 ---
 
 ## Getting Started
 
-1. Clone this repo
-
 ```bash
 git clone https://github.com/ganidande905/runestone.git
 cd runestone
-```
-Make sure all scripts inside scripts/ folder are executable:
-```
-chmod +x scripts/*.sh
-```
-2. Set up your .env and .gitignore
-
-```
 cp .env.example .env
+cd simple
+stack install
 ```
-Edit .env with your DB name, user, password, and container name
 
-3. Add These to Your .zshrc / .bashrc
- ```
- if [ -f ~/FOSS/runestone/.env ]; then
-  set -a
-  source ~/FOSS/runestone/.env
-  set +a
-fi
+Ensure you add this to `~/.zshrc` or `~/.bashrc`:
 
- # Open container shell
-alias de="docker exec -it runestone bash"
-
-# DB scripts
-alias pgc="~/runestone/scripts/create_db.sh"
-alias pgrm="~/runestone/scripts/delete_db.sh"
-alias pgl="~/runestone/scripts/list_db.sh"
-alias pge="~/runestone/scripts/enter_db.sh"
-alias pgdump="~/runestone/scripts/dump_db.sh"
-alias pgr="~/runestone/scripts/restore_db.sh"
-
- ```
-Then reload:
+```bash
+export PATH="$HOME/.local/bin:$PATH"
 ```
-source ~/.zshrc  # or ~/.bashrc
-```
-4. Start PostgreSQL container
-```
+
+Then:
+
+```bash
 docker-compose up -d
 ```
 
-## Command Aliases
-
-| Alias     | Description                            | Script Used             |
-|-----------|----------------------------------------|--------------------------|
-| `de`      | Open bash shell inside the container   | `docker exec -it $CONTAINER_NAME bash` |
-| `pgc`     | Create a new PostgreSQL database       | `scripts/create_db.sh`  |
-| `pgrm`    | Delete an existing database            | `scripts/delete_db.sh`  |
-| `pgl`     | List all databases in the container    | `scripts/list_db.sh`    |
-| `pge`     | Enter a specific database via `psql`   | `scripts/enter_db.sh`   |
-| `pgdump`  | Dump/export a database to `.sql`       | `scripts/dump_db.sh`    |
-| `pgr`     | Restore/import `.sql` into a database  | `scripts/restore_db.sh` |
-
-> 💡 All aliases use `.env` variables like `PGUSER`, `PGPORT`, `CONTAINER_NAME`, etc.
-
-Why “Runestone”?
 ---
-The name Runestone draws inspiration from ancient runestones — carved stones inscribed with runes that preserved important messages, histories, or magic in a tangible, enduring form.
+## Optional Aliases
 
-Similarly, this project is designed to be a magical keeper of your local databases, a sturdy and reliable “stone” that holds the vital information for your development workflows. It’s a place where your data “stories” live safely, accessible anytime you summon them.
+For faster access, you can define the following aliases in your shell config (`.zshrc`, `.bashrc`, etc.):
 
-Just like runestones were tools for communication and memory in olden times, Runestone is your modern developer’s tool to manage, store, and restore your data effortlessly — transforming complex database tasks into simple, repeatable rituals.
+```bash
+# PostgreSQL Docker Exec
+alias de="docker exec -it runestone bash"
+
+# Haskell-powered CLI shortcuts
+alias pgc="runestone create-db"
+alias pgrm="runestone delete-db"
+alias pgl="runestone list-db"
+alias pge="runestone enter-db"
+alias pgdump="runestone dump-db"
+alias pgr="runestone restore-db"
+```
+
+After adding these, reload your shell:
+
+```bash
+source ~/.zshrc  # or ~/.bashrc
+```
+
+## Why “Runestone”?
+
+Runestone draws inspiration from ancient runestones—durable, magical artifacts carved with symbols to preserve histories and messages. Similarly, Runestone is your modern tool to "inscribe" and manage your local PostgreSQL databases, ensuring your dev data remains accessible, organized, and easily restored. With a touch of Haskell magic, every command is type-safe, efficient, and ready for your next project.
+
+> **Tagline:** One container, infinite dev databases—etched in Haskell, carved in stone.
+
+---
+
+## Is This the First of Its Kind?
+
+Yes. Runestone is pioneering the approach of using **Haskell** to manage PostgreSQL in a local Dockerized development workflow. Most other tools use Bash, Python, or Go. Runestone uniquely delivers type safety, CLI ergonomics, and modular structure through a purely functional paradigm.
+
+---
+
+## License
+
+[MIT License](LICENSE)
+
+---
+
+## Support
+
+For issues, please open a GitHub issue.
+
+---
+
+

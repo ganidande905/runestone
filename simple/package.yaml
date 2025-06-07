@@ -1,0 +1,25 @@
+name: simple
+version: 0.1.0.0
+github: "ganidande905/simple"
+author: "GANESWARA NAGA VISHNU TEJA DANDE"
+maintainer: "dandgani57@gmail.com"
+executables:
+  runestone:
+    main: Main.hs
+    source-dirs:
+      - app
+      - src
+    ghc-options: -Wall
+    dependencies:
+      - base >= 4.7 && < 5
+      - postgresql-simple
+      - process
+      - dotenv
+      - directory
+      - time
+      - filepath
+
+dependencies:
+  - base >= 4.7 && < 5
+
+default-language: Haskell2010

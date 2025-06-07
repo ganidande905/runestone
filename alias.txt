@@ -1,13 +1,16 @@
-# Update this path to wherever you cloned the repo
-PROJECT_PATH=~/path/to/runestone
+if [ -f ~/FOSS/runestone/.env ]; then
+  set -a
+  source ~/FOSS/runestone/.env
+  set +a
+fi
 
-# Enter the Postgres container
+# Postgres Docker Exec
 alias de="docker exec -it runestone bash"
 
-# Postgres utility scripts
-alias pgc=\"\$PROJECT_PATH/scripts/create_db.sh\"      # Create a new database
-alias pgrm=\"\$PROJECT_PATH/scripts/delete_db.sh\"     # Delete an existing database
-alias pgl=\"\$PROJECT_PATH/scripts/list_db.sh\"        # List all available databases
-alias pge=\"\$PROJECT_PATH/scripts/enter_db.sh\"       # Connect to a specific database
-alias pgdump=\"\$PROJECT_PATH/scripts/dump_db.sh\"     # Dump a database to a .sql file
-alias pgr=\"\$PROJECT_PATH/scripts/restore_db.sh\"     # Restore from a .sql dump
+# Haskell-powered DB CLI (Haskell binary called 'runestone')
+alias pgc="stack exec runestone -- create-db"
+alias pgrm="stack exec runestone -- delete-db"
+alias pgl="stack exec runestone -- list-db"
+alias pge="stack exec runestone -- enter-db"
+alias pgdump="stack exec runestone -- dump-db"
+alias pgr="stack exec runestone -- restore-db"
