@@ -1,10 +1,10 @@
-# 🔧 Prerequisites for Running Runestone
+# Prerequisites for Running Runestone
 
 Runestone is a Haskell-based CLI utility to manage local PostgreSQL databases via Docker. To use it effectively, ensure the following dependencies are installed on your system.
 
 ---
 
-## 🍎 macOS Prerequisites
+## macOS Prerequisites
 
 ### 1. Install Homebrew (if not already)
 ```bash
@@ -27,7 +27,7 @@ source ~/.zshrc
 
 ---
 
-## 🐧 Linux Prerequisites
+## Linux Prerequisites
 
 ### 1. Install GHC & Stack
 ```bash
@@ -49,7 +49,7 @@ sudo usermod -aG docker $USER
 
 ---
 
-## 🪟 Windows Prerequisites
+## Windows Prerequisites
 
 ### 1. Install Chocolatey (if not already)
 Open PowerShell as Administrator:
@@ -69,7 +69,7 @@ choco install haskell-stack docker-desktop -y
 
 ---
 
-## 📦 Additional Setup Notes
+## Additional Setup Notes
 
 - Ensure `pg_config` is available in your `PATH`.
   - `which pg_config` (Linux/macOS) or `where pg_config` (Windows).
@@ -89,7 +89,7 @@ PGHOST=localhost
 
 ---
 
-## 👌 Once Ready
+## Once Ready
 
 Build the project:
 ```bash
