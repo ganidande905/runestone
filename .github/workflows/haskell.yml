@@ -19,6 +19,11 @@ jobs:
           enable-stack: true
           stack-version: 'latest'
 
+      - name: Configure Stack to disable Haddock fetch
+        run: |
+            echo "build:" >> stack.yaml
+            echo "  haddock: false" >> stack.yaml
+
       - name: Install dependencies
         run: stack setup && stack build --only-dependencies
 
