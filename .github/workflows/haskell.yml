@@ -1,3 +1,5 @@
+name: Haskell CI (Stack)
+
 on:
   push:
     branches:
@@ -20,14 +22,6 @@ jobs:
           enable-stack: true
           stack-version: 'latest'
 
-      - name: Pin snapshot manually
-        run: "echo 'resolver: lts-23.24' > stack.yaml"
-
-      - name: Disable Haddock docs
-        run: |
-          echo "build:" >> stack.yaml
-          echo "  haddock: false" >> stack.yaml
-
       - name: Install dependencies
         run: stack setup && stack build --only-dependencies
 
@@ -36,5 +30,3 @@ jobs:
 
       - name: Run tests
         run: stack test
-
-        
