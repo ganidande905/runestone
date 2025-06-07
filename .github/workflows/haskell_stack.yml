@@ -1,0 +1,48 @@
+name: Haskell CI (Stack)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Haskell (Stack)
+        uses: haskell/actions/setup@v2
+        with:
+          enable-stack: true
+          stack-version: 'latest'
+
+      - name: Ensure stack.yaml exists
+        run: |
+          if [ ! -f "stack.yaml" ]; then
+            echo "resolver: lts-23.24" > stack.yaml
+          fi
+
+      - name: Disable Haddock docs
+        run: |
+          echo "build:" >> stack.yaml
+          echo "  haddock: false" >> stack.yaml
+
+      - name: Install dependencies
+        run: stack setup && stack build --only-dependencies
+
+      - name: Build
+        run: stack build
+
+      - name: Run tests (if defined)
+        run: |
+          if grep -q 'tests:' package.yaml 2>/dev/null || grep -q 'test-suite' *.cabal 2>/dev/null; then
+            stack test
+          else
+            echo "No tests defined, skipping."
+          fi
